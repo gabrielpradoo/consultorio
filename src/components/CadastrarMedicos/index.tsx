@@ -22,7 +22,6 @@ export default function CadastrarMedicos() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     adicionarDoutor!({ nome, email, telefone })
-
   }
   return (
     <Container maxWidth="sm">

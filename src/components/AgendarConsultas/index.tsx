@@ -1,6 +1,7 @@
 import { Container, Box, Card, TextField, Button, Select, MenuItem } from "@mui/material"
 import { ConsultasContext } from "../../context/ConsultasContext"
 import { useContext, useState } from 'react'
+import { addMinutes, setHours, setMinutes } from "date-fns"
 
 export default function AgendarConsultas() {
   /**
@@ -20,7 +21,20 @@ export default function AgendarConsultas() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    agendarConsulta!({ id: consultas?.length || 0, nomePaciente, numeroTel, emailDoutor, data: '' })
+    const dataAtual = new Date(data);
+    const [horas, minutos] = time.split(':')
+    const dataComHora = setMinutes(setHours(dataAtual, Number(horas)), Number(minutos))
+    const fusoHorario = dataComHora.getTimezoneOffset();
+    const dataUTC = addMinutes(dataComHora, 0).toISOString();
+    console.log(dataUTC)
+
+
+    agendarConsulta!({ id: consultas?.length || 0, nomePaciente, numeroTel, emailDoutor, data: dataUTC })
+    setData('')
+    setNomePaciente('')
+    setNumeroTel('')
+    setEmailDoutor('')
+    setTime('08:00')
 
   }
   const horarios: string[] = []
@@ -30,7 +44,7 @@ export default function AgendarConsultas() {
   // [] => id: 0
   // [{ id: 0 }] => id: 1
   // [{ id: 0 }, { id: 1 }] => id: 2
-  // console.log(doutores)
+  console.log(consultas)
   return (
     <Container maxWidth="sm">
       <Box
